@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        {% for transaction in transactions_list %}
+            <div class="container mb-3" style="border: 2px solid Black">
+                <p>Id: {{ transaction.id }}</p>
+                <p>Sender: {{ transaction.sender }}</p>
+                <p>Receiver: {{ transaction.receiver }}</p>
+                <p>Transfer_amount: {{ transaction.transfer_amount }}</p>
+                <p>Commision: {{ transaction.commision }}</p>
+                <p>Status: {{ transaction.status }}</p>
+                <p>timestamp: {{ transaction.timestamp }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{% extends 'registration/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block main %}
+    <div class=" card signup" style="padding: 15px; margin: 15px">
+    <h2>Зарегистрироваться</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="button" class="btn btn-primary btn-block mb-3">Зарегистрироваться</button>
+            <a href="{% url "login" %}" style="text-decoration: none"><button type="button" class="btn btn-primary btn-block">Войти</button></a>
+        </form>
+    </div>
+{% endblock %}
