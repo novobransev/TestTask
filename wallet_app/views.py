@@ -1,8 +1,11 @@
 import random
 import string
+from rest_framework import mixins
+from rest_framework.viewsets import GenericViewSet
 
+from .serializers import WalletSerializer
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DeleteView
 from wallet_app.models import AccountWallet
@@ -58,6 +61,25 @@ class DeleteWallet(LoginRequiredMixin, DeleteView):
     model = AccountWallet
     template_name = 'wallet_app/confirm.html'
     success_url = reverse_lazy('home')
+
+
+class WalletViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.DestroyModelMixin, mixins.ListModelMixin, GenericViewSet):
+    queryset = AccountWallet.objects.all()
+    serializer_class = WalletSerializer
+    lookup_field = 'NAME'  # Позволяет получить экземпляр, не по id, а по полю NAME
+
+    def perform_create(self, serializer):
+        random_name = WalletCreate.get_random_name()
+        serializer.validated_data['NAME'] = random_name
+
+        if str(serializer.validated_data.get('currency')) == 'RUB':
+            serializer.validated_data['balance'] = 100
+        else:
+            serializer.validated_data['balance'] = 3
+        serializer.validated_data['owner'] = self.request.user  # Здесь почему-то присваивается число, а не имя
+
+        print(serializer.validated_data.get('owner'))  # Тут увидим имя пользователя
+        serializer.save()
 
 
 def home(request):

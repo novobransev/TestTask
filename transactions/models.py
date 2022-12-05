@@ -22,7 +22,8 @@ class Transactions(models.Model):
         id_sender = AccountWallet.objects.filter(NAME=self.sender).values('id')[0]['id']
         id_receiver = AccountWallet.objects.filter(NAME=self.receiver).values('id')[0]['id']
 
-        if int(AccountWallet.objects.filter(id=id_sender).values('currency_id')[0]['currency_id']) == int(AccountWallet.objects.filter(id=id_receiver).values('currency_id')[0]['currency_id']):
+        if int(AccountWallet.objects.filter(id=id_sender).values('currency_id')[0]['currency_id']) == int(AccountWallet.objects.filter(id=id_receiver).values('currency_id')[0]['currency_id'])\
+                or int(AccountWallet.objects.filter(id=id_receiver).values('currency_id')[0]['currency_id']) == int(AccountWallet.objects.filter(id=id_sender).values('currency_id')[0]['currency_id']):
 
             if str(self.sender) == str(acc_sender):
                 balance_sender = AccountWallet.objects.get(id=id_sender)
@@ -38,4 +39,4 @@ class Transactions(models.Model):
 
             super(Transactions, self).save(*args, **kwargs)
         else:
-            raise ValidationError('Валюты не совпадают')
+            raise ValidationError('Валюты не совпадают, правильный перевод должен быть из RUB в RUB, из USD в USD')
